@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1a0000;
+            --bg-secondary: #2d0000;
+            --bg-tertiary: #3d0000;
+            --border-color: #5a0000;
+            --text-primary: #FFFFFF;
+            --text-secondary: #d0a0a0;
+            --accent-color: #e74c3c;
+            --accent-hover: #c0392b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .license-badge {
+            padding: 8px 16px;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        .sidebar {
+            display: none;
+        }
+
+        .saved-configs-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .add-config-btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .add-config-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        .saved-config-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .saved-config-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .saved-config-item:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 1px var(--accent-color);
+        }
+
+        .config-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .config-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .config-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .config-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .config-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .config-action-btn:hover {
+            color: var(--accent-color);
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .config-action-btn.delete:hover {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .theme-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .theme-btn {
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--accent-color);
+        }
+
+        .theme-btn.active {
+            background: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
+
+        .theme-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .main-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius:6px;
+            padding: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            color: var(--accent-color);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: transparent;
+        }
+
+        #monaco-editor {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 635px;
+            width: 100%;
+            margin: -1px;
+            padding: 0;
+        }
+
+        
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Custom Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .modal-content {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-primary {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .modal-btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .modal-btn-secondary:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .message.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            color: #51cf66;
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid #dc3545;
+            color: #ff6b6b;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">CONFIG</div>
+            <div class="user-info">
+                <span class="license-badge" id="license-type">Loading...</span>
+                <span id="user-email" style="color: var(--text-secondary);"></span>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-grid">
+            <div class="sidebar">
+                <h3>Themes</h3>
+                <div class="theme-grid">
+                    <button class="theme-btn active" onclick="applyTheme('dark-gold')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #000 0%, #C9A961 100%);"></div>
+                        <span>Dark Gold</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('midnight-blue')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #0f0f23 0%, #4a90e2 100%);"></div>
+                        <span>Midnight Blue</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('purple-haze')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #1a0033 0%, #9d4edd 100%);"></div>
+                        <span>Purple Haze</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('emerald-night')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #0a1f0a 0%, #2ecc71 100%);"></div>
+                        <span>Emerald Night</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('crimson-dark')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #1a0000 0%, #e74c3c 100%);"></div>
+                        <span>Crimson Dark</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('ocean-deep')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #001a33 0%, #00d4ff 100%);"></div>
+                        <span>Ocean Deep</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('sunset-orange')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #1a0f00 0%, #ff6b35 100%);"></div>
+                        <span>Sunset Orange</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('forest-green')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #0d1f0d 0%, #52b788 100%);"></div>
+                        <span>Forest Green</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('rose-gold')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #1a0a0a 0%, #e0a899 100%);"></div>
+                        <span>Rose Gold</span>
+                    </button>
+                    <button class="theme-btn" onclick="applyTheme('cyber-pink')">
+                        <div class="theme-color" style="background: linear-gradient(135deg, #1a001a 0%, #ff006e 100%);"></div>
+                        <span>Cyber Pink</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="section-header">
+                    <h2>Configuration Editor</h2>
+                    <div class="action-btns">
+                        <button class="btn btn-secondary" onclick="resetConfig()">Reset</button>
+                        <button class="btn" onclick="saveConfig()">Save Config</button>
+                    </div>
+                </div>
+
+                <div id="monaco-editor"></div>
+            </div>
+            
+            <div class="saved-configs-panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Saved Configs</h3>
+                    <button class="add-config-btn" onclick="saveNewConfig()" title="Save Current Config">+</button>
+                </div>
+                <div class="saved-config-list" id="savedConfigList">
+                    <div class="empty-state">No saved configurations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-content" id="modalContent">
+                Modal content goes here...
+            </div>
+            <div class="modal-actions" id="modalActions">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn modal-btn-primary" id="modalConfirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqttlFqv021s9Oy8h0Lq42zE6PG41XZt0",
+            authDomain: "private-c2211.firebaseapp.com",
+            databaseURL: "https://private-c2211-default-rtdb.firebaseio.com",
+            projectId: "private-c2211",
+            storageBucket: "private-c2211.firebasestorage.app",
+            messagingSenderId: "672733759731",
+            appId: "1:672733759731:web:41ed3992ab49944fd64f86"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        const defaultConfig = {
+            "settings": {
+                "general": {
+                    "enabled": true,
+                    "debug": true
+                },
+                "aimbot": {
+                    "enabled": true,
+                    "mode": "mouse",
+                    "smoothness": 1,
+                    "fov": 200,
+                    "fovRadius": 10,
+                    "holdMode": true,
+                    "wallCheck": false,
+                    "teamCheck": false,
+                    "sticky": {
+                        "enabled": true,
+                        "distance": 300
+                    }
+                },
+                "triggerbot": {
+                    "enabled": true,
+                    "fireDelay": 0.1
+                },
+                "movement": {
+                    "speedEnabled": true,
+                    "speedMultiplier": 12
+                },
+                "visuals": {
+                    "chams": {
+                        "enabled": false,
+                        "fill": { "color": [255, 0, 0], "alpha": 0.5 },
+                        "outline": { "color": [255, 255, 255], "alpha": 0 }
+                    }
+                },
+                "keybinds": {
+                    "aimbot": {
+                        "toggle": "L",
+                        "activate": "MouseButton2"
+                    },
+                    "triggerbot": {
+                        "toggle": "P",
+                        "activate": "MouseButton2"
+                    },
+                    "movement": {
+                        "speedToggle": "G"
+                    },
+                    "visuals": {
+                        "chamsToggle": "N"
+                    }
+                }
+            }
+        };
+
+        let currentUser = null;
+        let currentConfig = { ...defaultConfig };
+        let editor = null;
+
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+    // Define custom crimson theme
+    monaco.editor.defineTheme('crimson-dark', {
+        base: 'vs-dark',
+        inherit: false, // Forces Monaco to only use our rules below
+        rules: [
+            // Target the specific internal JSON tokens that cause the blue/yellow colors
+            { token: 'string.key.json', foreground: 'FFFFFF' },      // Property names (Keys): White
+            { token: 'string.value.json', foreground: 'e74c3c' },    // Text values: Red (same as booleans)
+            { token: 'string.json', foreground: 'e74c3c' },          // General strings: Red (same as booleans)
+            
+            { token: 'number.json', foreground: 'e74c3c' },          // Numbers: Red
+            { token: 'keyword.json', foreground: 'e74c3c' },         // Booleans (true/false): Red
+            
+            { token: 'delimiter.json', foreground: '7f8c8d' },       // Brackets and Commas: Grey
+            { token: 'delimiter.bracket.json', foreground: '7f8c8d' },// Specific brackets: Grey
+        ],
+        colors: {
+            'editor.background': '#1a0000',
+            'editor.foreground': '#FFFFFF',
+            'editor.lineHighlightBackground': '#2d0000',
+            'editorCursor.foreground': '#e74c3c',
+            'editor.selectionBackground': '#5a0000',
+            'editorIndentGuide.background': '#3d0000',
+            'editorIndentGuide.activeBackground': '#7f8c8d',
+            'editorLineNumber.foreground': '#5a0000',
+            'editorLineNumber.activeForeground': '#e74c3c'
+        }
+    });
+    
+    editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+        value: JSON.stringify(defaultConfig, null, 2),
+        language: 'json',
+        theme: 'crimson-dark',
+        automaticLayout: true,
+        minimap: { enabled: false },
+        fontSize: 14,
+        wordWrap: 'on',
+        formatOnPaste: true,
+        formatOnType: true,
+        scrollBeyondLastLine: false,
+        
+        // --- THE CRITICAL FIXES FOR BRACKETS & SEMANTICS ---
+        'semanticHighlighting.enabled': true,
+        'bracketPairColorization.enabled': false, // Disables the default "Rainbow" bracket colors
+        'matchBrackets': 'always',
+        'renderLineHighlight': 'all',
+        // ---------------------------------------------------
+    });
+});
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user && user.emailVerified) {
+                currentUser = user;
+                document.getElementById('user-email').textContent = user.email;
+                
+                const license = JSON.parse(localStorage.getItem('userLicense'));
+                if (license) {
+                    document.getElementById('license-type').textContent = license.type || 'Trial';
+                }
+                
+                await loadConfig();
+                await loadSavedConfigsFromFirebase();
+            } else {
+                window.location.href = 'config';
+            }
+        });
+
+        async function loadConfig() {
+            try {
+                const configRef = ref(database, `configs/${currentUser.uid}`);
+                const snapshot = await get(configRef);
+                
+                if (snapshot.exists()) {
+                    currentConfig = snapshot.val().config;
+                    if (editor) {
+                        editor.setValue(JSON.stringify(currentConfig, null, 2));
+                    }
+                } else {
+                    if (editor) {
+                        editor.setValue(JSON.stringify(defaultConfig, null, 2));
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading config:", error);
+                showMessage("Error loading configuration", "error");
+            }
+        }
+
+        window.saveConfig = async function() {
+            try {
+                const configText = editor ? editor.getValue() : '';
+                const parsedConfig = JSON.parse(configText);
+                
+                const configRef = ref(database, `configs/${currentUser.uid}`);
+                await set(configRef, {
+                    config: parsedConfig,
+                    lastModified: new Date().toISOString(),
+                    userId: currentUser.uid,
+                    email: currentUser.email
+                });
+                
+                currentConfig = parsedConfig;
+                
+                showMessage("Configuration saved successfully!", "success");
+            } catch (error) {
+                console.error("Error saving config:", error);
+                if (error instanceof SyntaxError) {
+                    showMessage("Invalid JSON format. Please check your configuration.", "error");
+                } else {
+                    showMessage("Error saving configuration", "error");
+                }
+            }
+        }
+
+        window.resetConfig = function() {
+            showModal(
+                'Reset Configuration',
+                'Are you sure you want to reset to default configuration? This action cannot be undone.',
+                function() {
+                    currentConfig = { ...defaultConfig };
+                    if (editor) {
+                        editor.setValue(JSON.stringify(defaultConfig, null, 2));
+                    }
+                    showMessage("Configuration reset to defaults", "success");
+                },
+                'Reset'
+            );
+        }
+
+        window.downloadConfig = function() {
+            const configText = editor ? editor.getValue() : '';
+            const blob = new Blob([configText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showMessage("Configuration downloaded", "success");
+        }
+
+        // Saved Configs Management
+        let savedConfigs = [];
+
+        async function loadSavedConfigsFromFirebase() {
+            if (!currentUser) return;
+            
+            try {
+                const savedConfigsRef = ref(database, `savedConfigs/${currentUser.uid}`);
+                const snapshot = await get(savedConfigsRef);
+                
+                if (snapshot.exists()) {
+                    savedConfigs = Object.values(snapshot.val()) || [];
+                    updateSavedConfigsList();
+                } else {
+                    savedConfigs = [];
+                    updateSavedConfigsList();
+                }
+            } catch (error) {
+                console.error("Error loading saved configs:", error);
+                savedConfigs = [];
+                updateSavedConfigsList();
+            }
+        }
+
+        async function saveSavedConfigsToFirebase() {
+            if (!currentUser) return;
+            
+            try {
+                const savedConfigsRef = ref(database, `savedConfigs/${currentUser.uid}`);
+                const configsObject = {};
+                
+                savedConfigs.forEach(config => {
+                    configsObject[config.id] = config;
+                });
+                
+                await set(savedConfigsRef, configsObject);
+            } catch (error) {
+                console.error("Error saving configs to Firebase:", error);
+                showMessage("Error saving configurations to cloud", "error");
+            }
+        }
+
+        window.saveNewConfig = function() {
+            showModal(
+                'Save Configuration',
+                '<input type="text" id="configNameInput" placeholder="Enter configuration name..." style="width: 100%; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); margin-bottom: 10px;">',
+                async function() {
+                    const nameInput = document.getElementById('configNameInput');
+                    const name = nameInput ? nameInput.value.trim() : '';
+                    
+                    if (name) {
+                        const configText = editor ? editor.getValue() : '';
+                        const config = {
+                            id: Date.now().toString(),
+                            name: name,
+                            content: configText,
+                            date: new Date().toISOString()
+                        };
+                        
+                        savedConfigs.push(config);
+                        updateSavedConfigsList();
+                        await saveSavedConfigsToFirebase();
+                        showMessage(`Configuration "${name}" saved successfully`, "success");
+                    } else {
+                        showMessage("Please enter a configuration name", "error");
+                        return false; // Prevent modal from closing
+                    }
+                },
+                'Save'
+            );
+            
+            // Focus input after modal opens
+            setTimeout(() => {
+                const input = document.getElementById('configNameInput');
+                if (input) input.focus();
+            }, 100);
+        };
+
+        window.loadConfig = function(configId) {
+            const config = savedConfigs.find(c => c.id === configId);
+            if (config && editor) {
+                editor.setValue(config.content);
+                showMessage(`Configuration "${config.name}" loaded`, "success");
+            }
+        };
+
+        window.renameConfig = function(configId) {
+            const config = savedConfigs.find(c => c.id === configId);
+            if (!config) return;
+            
+            showModal(
+                'Rename Configuration',
+                `<input type="text" id="renameConfigInput" value="${config.name}" style="width: 100%; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary);">`,
+                function() {
+                    const nameInput = document.getElementById('renameConfigInput');
+                    const newName = nameInput.value.trim();
+                    
+                    if (newName && newName !== config.name) {
+                        config.name = newName;
+                        updateSavedConfigsList();
+                        saveSavedConfigsToFirebase();
+                        showMessage(`Configuration renamed to "${newName}"`, "success");
+                    }
+                },
+                'Rename'
+            );
+            
+            // Focus and select text after modal opens
+            setTimeout(() => {
+                const input = document.getElementById('renameConfigInput');
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
+            }, 100);
+        };
+
+        window.deleteConfig = function(configId) {
+            const config = savedConfigs.find(c => c.id === configId);
+            if (!config) return;
+            
+            showModal(
+                'Delete Configuration',
+                `Are you sure you want to delete "${config.name}"? This action cannot be undone.`,
+                function() {
+                    savedConfigs = savedConfigs.filter(c => c.id !== configId);
+                    updateSavedConfigsList();
+                    saveSavedConfigsToFirebase();
+                    showMessage(`Configuration "${config.name}" deleted`, "success");
+                },
+                'Delete'
+            );
+        };
+
+        function updateSavedConfigsList() {
+            const listContainer = document.getElementById('savedConfigList');
+            
+            if (savedConfigs.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">No saved configurations</div>';
+                return;
+            }
+            
+            listContainer.innerHTML = savedConfigs.map(config => `
+                <div class="saved-config-item">
+                    <div class="config-info">
+                        <div class="config-name">${config.name}</div>
+                        <div class="config-date">${new Date(config.date).toLocaleDateString()}</div>
+                    </div>
+                    <div class="config-actions">
+                        <button class="config-action-btn" onclick="loadConfig('${config.id}')" title="Load">&#9658;</button>
+                        <button class="config-action-btn" onclick="renameConfig('${config.id}')" title="Rename">&#9998;</button>
+                        <button class="config-action-btn delete" onclick="deleteConfig('${config.id}')" title="Delete">&#10005;</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.handleLogout = async function() {
+            showModal(
+                'Confirm Logout',
+                'Are you sure you want to logout?',
+                async function() {
+                    try {
+                        await signOut(auth);
+                        localStorage.removeItem('userLicense');
+                        window.location.href = 'config';
+                    } catch (error) {
+                        console.error("Logout error:", error);
+                    }
+                },
+                'Logout'
+            );
+        }
+
+        function showMessage(message, type = 'success') {
+            // Use modal for messages instead of the removed message element
+            const modalTitle = type === 'success' ? 'Success' : 'Error';
+            showModal(modalTitle, message, null, 'OK');
+        }
+
+        // Crimson dark theme is now permanent - no theme switching
+
+        // Modal Functions
+        window.showModal = function(title, content, confirmCallback, confirmText = 'Confirm') {
+            const modal = document.getElementById('modalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+            
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            confirmBtn.textContent = confirmText;
+            
+            // Remove previous event listeners
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            
+            // Add new event listener
+            newConfirmBtn.addEventListener('click', async function() {
+                if (confirmCallback) {
+                    const result = await confirmCallback();
+                    if (result !== false) {
+                        closeModal();
+                    }
+                } else {
+                    closeModal();
+                }
+            });
+            
+            modal.classList.add('active');
+        };
+
+        window.closeModal = function() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.remove('active');
+        };
+
+        // Close modal when clicking overlay
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

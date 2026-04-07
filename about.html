@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - GoldenEstate.homes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .about-hero {
+            padding: 180px 0 80px;
+            background: var(--darker-bg);
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .about-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            color: var(--gray-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .team-section {
+            padding: 120px 0;
+            background: var(--dark-bg);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .team-member {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .team-member:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+        }
+        
+        .team-image {
+            height: 350px;
+            overflow: hidden;
+        }
+        
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .team-info {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .team-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .team-role {
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .team-bio {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index" class="logo">
+                    <span class="logo-text">GOLDENESTATE</span>
+                    <span class="logo-accent">.homes</span>
+                </a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index" class="nav-link">Home</a></li>
+                    <li><a href="properties" class="nav-link">Properties</a></li>
+                    <li><a href="about" class="nav-link active">About</a></li>
+                    <li><a href="contact" class="nav-link">Contact</a></li>
+                </ul>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="about-hero">
+        <div class="container">
+            <span class="section-tag">ABOUT US</span>
+            <h1>Our Story</h1>
+            <p>For over 25 years, GoldenEstate.homes has been the premier choice for luxury real estate in Los Angeles, connecting discerning clients with their dream properties</p>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=1000&fit=crop" alt="Luxury Real Estate">
+                </div>
+                <div class="about-content">
+                    <span class="section-tag">WHO WE ARE</span>
+                    <h2 class="section-title">Los Angeles's Premier Luxury Real Estate Agency</h2>
+                    <p class="about-text">With over 25 years of experience in the Los Angeles luxury real estate market, GoldenEstate.homes has established itself as the premier choice for discerning buyers and sellers.</p>
+                    <p class="about-text">Our team of expert agents specializes in high-end properties across Beverly Hills, Malibu, Bel Air, and other prestigious Los Angeles neighborhoods. We pride ourselves on delivering exceptional service and unparalleled market knowledge.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <div class="feature-number">01</div>
+                            <div class="feature-content">
+                                <h4>Luxury Expertise</h4>
+                                <p>Specialized knowledge in premium properties and exclusive neighborhoods</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <div class="feature-number">02</div>
+                            <div class="feature-content">
+                                <h4>Personalized Service</h4>
+                                <p>Tailored approach to meet your unique real estate needs</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <div class="feature-number">03</div>
+                            <div class="feature-content">
+                                <h4>Proven Track Record</h4>
+                                <p>Award-winning results with over 500 successful transactions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">Properties Sold</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="1200">0</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="25">0</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">% Client Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">OUR TEAM</span>
+                <h2 class="section-title">Meet Our Experts</h2>
+                <p class="section-subtitle">Dedicated professionals committed to finding your perfect property</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=700&fit=crop" alt="Michael Chen">
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Michael Chen</h3>
+                        <p class="team-role">Founder & CEO</p>
+                        <p class="team-bio">With 25 years of experience in luxury real estate, Michael has closed over $2 billion in property sales.</p>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=700&fit=crop" alt="Sarah Martinez">
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Sarah Martinez</h3>
+                        <p class="team-role">Senior Agent</p>
+                        <p class="team-bio">Specializing in Beverly Hills estates, Sarah brings 15 years of expertise and exceptional client service.</p>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=700&fit=crop" alt="David Thompson">
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">David Thompson</h3>
+                        <p class="team-role">Luxury Property Specialist</p>
+                        <p class="team-bio">David's expertise in Malibu and coastal properties has made him a top producer for 10 consecutive years.</p>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=700&fit=crop" alt="Emily Rodriguez">
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Emily Rodriguez</h3>
+                        <p class="team-role">Investment Consultant</p>
+                        <p class="team-bio">Emily helps clients build wealth through strategic real estate investments in prime LA locations.</p>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=700&fit=crop" alt="James Wilson">
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">James Wilson</h3>
+                        <p class="team-role">Modern Homes Specialist</p>
+                        <p class="team-bio">James focuses on contemporary architecture and modern luxury homes throughout Los Angeles.</p>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&h=700&fit=crop" alt="Lisa Anderson">
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Lisa Anderson</h3>
+                        <p class="team-role">Client Relations Manager</p>
+                        <p class="team-bio">Lisa ensures every client receives white-glove service throughout their real estate journey.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <a href="index" class="logo">
+                        <span class="logo-text">GOLDENESTATE</span>
+                        <span class="logo-accent">.homes</span>
+                    </a>
+                    <p>Your trusted partner in luxury Los Angeles real estate.</p>
+                    <div class="footer-contact">
+                        <p>(310) 555-GOLD</p>
+                        <p>info@goldenestate.homes</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index">Home</a></li>
+                        <li><a href="properties">Properties</a></li>
+                        <li><a href="about">About</a></li>
+                        <li><a href="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="properties?type=buy">Buy Property</a></li>
+                        <li><a href="contact?service=sell">Sell Property</a></li>
+                        <li><a href="contact?service=management">Property Management</a></li>
+                        <li><a href="contact?service=consulting">Investment Consulting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                        <a href="#" class="social-link">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 GoldenEstate.homes. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

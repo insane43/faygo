@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Portal - GoldenEstate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a0000;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-card {
+            background: rgba(45, 0, 0, 0.95);
+            border: 1px solid #5a0000;
+            border-radius: 16px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+
+        .logo p {
+            color: #A0A0A0;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .form-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid #2A2A2A;
+            color: #A0A0A0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background: #e74c3c;
+            color: #fff;
+            border-color: #e74c3c;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #A0A0A0;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1a0000;
+            border: 1px solid #5a0000;
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+
+        .form-group input::placeholder {
+            color: #666;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .remember-me label {
+            color: #A0A0A0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #c0392b;
+        }
+
+        .submit-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid #dc3545;
+            color: #ff6b6b;
+        }
+
+        .message.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            color: #51cf66;
+        }
+
+        .message.info {
+            background: rgba(23, 162, 184, 0.2);
+            border: 1px solid #17a2b8;
+            color: #4dabf7;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #A0A0A0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card">
+            <div class="logo">
+                <h1>VIRTUE</h1>
+                <p>Access Portal</p>
+            </div>
+
+            <div class="form-tabs">
+                <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+                <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <div id="signin-form" class="form-container active">
+                <form onsubmit="handleSignIn(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signin-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signin-password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>License Key</label>
+                        <input type="text" id="signin-license" placeholder="Enter your license key" required>
+                    </div>
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-me">
+                        <label for="remember-me">Remember me</label>
+                    </div>
+                    <button type="submit" class="submit-btn">Sign In</button>
+                </form>
+                <div id="signin-message" class="message"></div>
+            </div>
+
+            <div id="signup-form" class="form-container">
+                <form onsubmit="handleSignUp(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signup-password" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="signup-confirm" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Sign Up</button>
+                </form>
+                <div id="signup-message" class="message"></div>
+            </div>
+
+            <div class="back-link">
+                <a href="index">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqttlFqv021s9Oy8h0Lq42zE6PG41XZt0",
+            authDomain: "private-c2211.firebaseapp.com",
+            databaseURL: "https://private-c2211-default-rtdb.firebaseio.com",
+            projectId: "private-c2211",
+            storageBucket: "private-c2211.firebasestorage.app",
+            messagingSenderId: "672733759731",
+            appId: "1:672733759731:web:41ed3992ab49944fd64f86"
+        };
+
+        const licenseDbConfig = {
+            databaseURL: "https://kova-42298-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const licenseApp = initializeApp(licenseDbConfig, "licenseApp");
+        const auth = getAuth(app);
+        const database = getDatabase(licenseApp);
+
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+            
+            if (tab === 'signin') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.getElementById('signin-form').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.getElementById('signup-form').classList.add('active');
+            }
+        }
+
+        function showMessage(elementId, message, type) {
+            const messageEl = document.getElementById(elementId);
+            messageEl.textContent = message;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        async function validateLicenseKey(licenseKey) {
+            try {
+                const licensesRef = ref(database, 'licenses');
+                const snapshot = await get(licensesRef);
+                
+                if (snapshot.exists()) {
+                    const licenses = snapshot.val();
+                    for (const userId in licenses) {
+                        for (const licenseId in licenses[userId]) {
+                            const license = licenses[userId][licenseId];
+                            if (license.key === licenseKey) {
+                                if (license.status === "Used") {
+                                    const expiryDate = new Date(license.expiryDate);
+                                    const now = new Date();
+                                    if (expiryDate > now) {
+                                        return { valid: true, license: license };
+                                    } else {
+                                        return { valid: false, message: "License key has expired" };
+                                    }
+                                } else {
+                                    return { valid: false, message: "License key is not activated" };
+                                }
+                            }
+                        }
+                    }
+                }
+                return { valid: false, message: "Invalid license key" };
+            } catch (error) {
+                console.error("License validation error:", error);
+                return { valid: false, message: "Error validating license key" };
+            }
+        }
+
+        window.handleSignUp = async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('signup-message', 'Passwords do not match', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('signup-message', 'Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await sendEmailVerification(userCredential.user);
+                
+                showMessage('signup-message', 'Account created! Please check your email to verify your account before signing in.', 'success');
+                
+                setTimeout(() => {
+                    switchTab('signin');
+                }, 3000);
+            } catch (error) {
+                let errorMessage = 'Sign up failed';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'Email already in use';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email address';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password is too weak';
+                }
+                showMessage('signup-message', errorMessage, 'error');
+            }
+        }
+
+        window.handleSignIn = async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            const licenseKey = document.getElementById('signin-license').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+
+            try {
+                const licenseValidation = await validateLicenseKey(licenseKey);
+                
+                if (!licenseValidation.valid) {
+                    showMessage('signin-message', licenseValidation.message, 'error');
+                    return;
+                }
+
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                if (!userCredential.user.emailVerified) {
+                    showMessage('signin-message', 'Please verify your email before signing in. Check your inbox for the verification link.', 'error');
+                    await auth.signOut();
+                    return;
+                }
+
+                if (rememberMe) {
+                    localStorage.setItem('rememberedUser', JSON.stringify({
+                        email: email,
+                        licenseKey: licenseKey
+                    }));
+                } else {
+                    localStorage.removeItem('rememberedUser');
+                }
+
+                localStorage.setItem('userLicense', JSON.stringify(licenseValidation.license));
+                
+                showMessage('signin-message', 'Sign in successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard';
+                }, 1500);
+            } catch (error) {
+                let errorMessage = 'Sign in failed';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email address';
+                }
+                showMessage('signin-message', errorMessage, 'error');
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.emailVerified) {
+                const rememberedUser = localStorage.getItem('rememberedUser');
+                if (rememberedUser) {
+                    const userData = JSON.parse(rememberedUser);
+                    document.getElementById('signin-email').value = userData.email;
+                    document.getElementById('signin-license').value = userData.licenseKey;
+                    document.getElementById('remember-me').checked = true;
+                }
+            }
+        });
+
+        const rememberedUser = localStorage.getItem('rememberedUser');
+        if (rememberedUser) {
+            const userData = JSON.parse(rememberedUser);
+            document.getElementById('signin-email').value = userData.email;
+            document.getElementById('signin-license').value = userData.licenseKey;
+            document.getElementById('remember-me').checked = true;
+        }
+    </script>
+</body>
+</html>

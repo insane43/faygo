@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldenEstate.homes - Luxury Real Estate in Los Angeles, CA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index" class="logo">
+                    <span class="logo-text">GOLDENESTATE</span>
+                    <span class="logo-accent">.homes</span>
+                </a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index" class="nav-link active">Home</a></li>
+                    <li><a href="properties" class="nav-link">Properties</a></li>
+                    <li><a href="about" class="nav-link">About</a></li>
+                    <li><a href="contact" class="nav-link">Contact</a></li>
+                </ul>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-background"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Find Your Dream Home in Los Angeles</h1>
+            <p class="hero-subtitle">Discover luxury properties in California's most prestigious neighborhoods</p>
+            <div class="hero-search">
+                <input type="text" placeholder="Enter location, property type, or price range" class="search-input">
+                <button class="search-btn">Search Properties</button>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll to explore</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">Properties Sold</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="1200">0</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="25">0</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">% Client Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="properties" class="properties">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">EXCLUSIVE LISTINGS</span>
+                <h2 class="section-title">Featured Properties</h2>
+                <p class="section-subtitle">Handpicked luxury homes in Los Angeles's most prestigious neighborhoods</p>
+            </div>
+            
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">All Properties</button>
+                <button class="filter-btn" data-filter="luxury">Luxury Estates</button>
+                <button class="filter-btn" data-filter="modern">Modern Homes</button>
+                <button class="filter-btn" data-filter="villa">Villas</button>
+            </div>
+
+            <div class="properties-grid">
+                <a href="property-1" class="property-card" data-category="luxury">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=600&fit=crop" alt="Beverly Hills Mansion">
+                        <div class="property-badge">Featured</div>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price">$8,950,000</div>
+                        <h3 class="property-title">Beverly Hills Mansion</h3>
+                        <p class="property-location">Beverly Hills, Los Angeles, CA</p>
+                        <div class="property-features">
+                            <span class="feature"><span class="feature-icon">bed</span> 6 Beds</span>
+                            <span class="feature"><span class="feature-icon">bath</span> 7 Baths</span>
+                            <span class="feature"><span class="feature-icon">size</span> 8,500 sqft</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="property-2" class="property-card" data-category="modern">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop" alt="Hollywood Hills Contemporary">
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price">$5,200,000</div>
+                        <h3 class="property-title">Hollywood Hills Contemporary</h3>
+                        <p class="property-location">Hollywood Hills, Los Angeles, CA</p>
+                        <div class="property-features">
+                            <span class="feature"><span class="feature-icon">bed</span> 5 Beds</span>
+                            <span class="feature"><span class="feature-icon">bath</span> 5 Baths</span>
+                            <span class="feature"><span class="feature-icon">size</span> 6,200 sqft</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="property-3" class="property-card" data-category="villa">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop" alt="Malibu Beach Villa">
+                        <div class="property-badge">New</div>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price">$12,500,000</div>
+                        <h3 class="property-title">Malibu Beach Villa</h3>
+                        <p class="property-location">Malibu, Los Angeles, CA</p>
+                        <div class="property-features">
+                            <span class="feature"><span class="feature-icon">bed</span> 7 Beds</span>
+                            <span class="feature"><span class="feature-icon">bath</span> 8 Baths</span>
+                            <span class="feature"><span class="feature-icon">size</span> 10,000 sqft</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="property-4" class="property-card" data-category="luxury">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop" alt="Bel Air Estate">
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price">$15,750,000</div>
+                        <h3 class="property-title">Bel Air Estate</h3>
+                        <p class="property-location">Bel Air, Los Angeles, CA</p>
+                        <div class="property-features">
+                            <span class="feature"><span class="feature-icon">bed</span> 8 Beds</span>
+                            <span class="feature"><span class="feature-icon">bath</span> 10 Baths</span>
+                            <span class="feature"><span class="feature-icon">size</span> 12,500 sqft</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="property-5" class="property-card" data-category="modern">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop" alt="Santa Monica Modern">
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price">$4,850,000</div>
+                        <h3 class="property-title">Santa Monica Modern</h3>
+                        <p class="property-location">Santa Monica, Los Angeles, CA</p>
+                        <div class="property-features">
+                            <span class="feature"><span class="feature-icon">bed</span> 4 Beds</span>
+                            <span class="feature"><span class="feature-icon">bath</span> 4 Baths</span>
+                            <span class="feature"><span class="feature-icon">size</span> 5,200 sqft</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="property-6" class="property-card" data-category="villa">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop" alt="Pacific Palisades Villa">
+                        <div class="property-badge">Featured</div>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price">$9,200,000</div>
+                        <h3 class="property-title">Pacific Palisades Villa</h3>
+                        <p class="property-location">Pacific Palisades, Los Angeles, CA</p>
+                        <div class="property-features">
+                            <span class="feature"><span class="feature-icon">bed</span> 6 Beds</span>
+                            <span class="feature"><span class="feature-icon">bath</span> 7 Baths</span>
+                            <span class="feature"><span class="feature-icon">size</span> 7,800 sqft</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=1000&fit=crop" alt="Luxury Real Estate">
+                </div>
+                <div class="about-content">
+                    <span class="section-tag">ABOUT US</span>
+                    <h2 class="section-title">Los Angeles's Premier Luxury Real Estate Agency</h2>
+                    <p class="about-text">With over 25 years of experience in the Los Angeles luxury real estate market, GoldenEstate.homes has established itself as the premier choice for discerning buyers and sellers.</p>
+                    <p class="about-text">Our team of expert agents specializes in high-end properties across Beverly Hills, Malibu, Bel Air, and other prestigious Los Angeles neighborhoods. We pride ourselves on delivering exceptional service and unparalleled market knowledge.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <div class="feature-number">01</div>
+                            <div class="feature-content">
+                                <h4>Luxury Expertise</h4>
+                                <p>Specialized knowledge in premium properties and exclusive neighborhoods</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <div class="feature-number">02</div>
+                            <div class="feature-content">
+                                <h4>Personalized Service</h4>
+                                <p>Tailored approach to meet your unique real estate needs</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <div class="feature-number">03</div>
+                            <div class="feature-content">
+                                <h4>Proven Track Record</h4>
+                                <p>Award-winning results with over 500 successful transactions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">CONTACT US</span>
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Ready to find your dream home? Contact us today</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">PHONE</div>
+                        <div>
+                            <h4>Call Us</h4>
+                            <p>(310) 555-GOLD</p>
+                            <p>(310) 555-4653</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">EMAIL</div>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>info@goldenestate.homes</p>
+                            <p>sales@goldenestate.homes</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">LOCATION</div>
+                        <div>
+                            <h4>Visit Our Office</h4>
+                            <p>9200 Sunset Blvd</p>
+                            <p>Los Angeles, CA 90069</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="Phone Number" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <a href="index" class="logo">
+                        <span class="logo-text">GOLDENESTATE</span>
+                        <span class="logo-accent">.homes</span>
+                    </a>
+                    <p>Your trusted partner in luxury Los Angeles real estate.</p>
+                    <div class="footer-contact">
+                        <p>(310) 555-GOLD</p>
+                        <p>info@goldenestate.homes</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index">Home</a></li>
+                        <li><a href="properties">Properties</a></li>
+                        <li><a href="about">About</a></li>
+                        <li><a href="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="properties?type=buy">Buy Property</a></li>
+                        <li><a href="contact?service=sell">Sell Property</a></li>
+                        <li><a href="contact?service=management">Property Management</a></li>
+                        <li><a href="contact?service=consulting">Investment Consulting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                        <a href="#" class="social-link">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 GoldenEstate.homes. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
