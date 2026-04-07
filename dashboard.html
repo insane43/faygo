@@ -740,9 +740,13 @@
                 const configText = editor ? editor.getValue() : '';
                 const parsedConfig = JSON.parse(configText);
                 
+                // Get license key from localStorage (set during login)
+                const license = JSON.parse(localStorage.getItem('userLicense') || '{}');
+                
                 const configRef = ref(database, `configs/${currentUser.uid}`);
                 await set(configRef, {
                     config: parsedConfig,
+                    licenseKey: license.key || '', // Store license key for API lookup
                     lastModified: new Date().toISOString(),
                     userId: currentUser.uid,
                     email: currentUser.email
@@ -1018,6 +1022,55 @@
                 closeModal();
             }
         });
+
+        // API endpoint check - only serve JSON if path contains /api/config
+        if (window.location.pathname.includes('/api/config')) {
+            window.addEventListener('DOMContentLoaded', function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const licenseKey = urlParams.get('license');
+                
+                if (licenseKey) {
+                    // Serve config as JSON for C++ injector
+                    fetchUserConfigByLicense(licenseKey).then(config => {
+                        if (config) {
+                            // Return JSON response
+                            document.body.innerHTML = JSON.stringify(config);
+                        } else {
+                            document.body.innerHTML = JSON.stringify({ error: "License not found" });
+                        }
+                    }).catch(error => {
+                        document.body.innerHTML = JSON.stringify({ error: "Server error" });
+                    });
+                } else {
+                    document.body.innerHTML = JSON.stringify({ error: "License key required" });
+                }
+            });
+        }
+
+        async function fetchUserConfigByLicense(licenseKey) {
+            try {
+                // Query all user configs to find matching license
+                const usersRef = ref(database, 'configs');
+                const snapshot = await get(usersRef);
+                
+                if (snapshot.exists()) {
+                    const allConfigs = snapshot.val();
+                    
+                    // Find user with matching license key
+                    for (const userId in allConfigs) {
+                        const userConfig = allConfigs[userId];
+                        if (userConfig.licenseKey === licenseKey && userConfig.config) {
+                            return userConfig.config;
+                        }
+                    }
+                }
+                
+                return null;
+            } catch (error) {
+                console.error("Error fetching config by license:", error);
+                return null;
+            }
+        }
     </script>
 </body>
 </html>
