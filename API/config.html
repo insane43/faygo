@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config API</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <pre id="output">Loading...</pre>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqttlFqv021s9Oy8h0Lq42zE6PG41XZt0",
+            authDomain: "private-c2211.firebaseapp.com",
+            databaseURL: "https://private-c2211-default-rtdb.firebaseio.com",
+            projectId: "private-c2211",
+            storageBucket: "private-c2211.firebasestorage.app",
+            messagingSenderId: "672733759731",
+            appId: "1:672733759731:web:41ed3992ab49944fd64f86"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        async function fetchUserConfigByLicense(licenseKey) {
+            try {
+                const usersRef = ref(database, 'configs');
+                const snapshot = await get(usersRef);
+                
+                if (snapshot.exists()) {
+                    const allConfigs = snapshot.val();
+                    
+                    for (const userId in allConfigs) {
+                        const userConfig = allConfigs[userId];
+                        if (userConfig.licenseKey === licenseKey && userConfig.config) {
+                            return userConfig.config;
+                        }
+                    }
+                }
+                
+                return null;
+            } catch (error) {
+                console.error("Error fetching config by license:", error);
+                return null;
+            }
+        }
+
+        async function main() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const licenseKey = urlParams.get('license');
+            const outputEl = document.getElementById('output');
+            
+            if (!licenseKey) {
+                const errorResponse = { error: "License key required" };
+                outputEl.textContent = JSON.stringify(errorResponse, null, 2);
+                document.body.innerHTML = JSON.stringify(errorResponse);
+                return;
+            }
+
+            const config = await fetchUserConfigByLicense(licenseKey);
+            
+            if (config) {
+                outputEl.textContent = JSON.stringify(config, null, 2);
+                document.body.innerHTML = JSON.stringify(config);
+            } else {
+                const errorResponse = { error: "License not found or no config available" };
+                outputEl.textContent = JSON.stringify(errorResponse, null, 2);
+                document.body.innerHTML = JSON.stringify(errorResponse);
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>
